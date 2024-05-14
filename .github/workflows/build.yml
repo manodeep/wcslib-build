@@ -13,6 +13,8 @@ jobs:
     strategy:
       matrix:
         wcslib-version: ["8.2.2", "8.3"]
+        numpoints: [1000, 10000]
+        maxthreads: [5]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,10 +34,10 @@ jobs:
         run: make WCSLIB_VERSION=${{ matrix.wcslib-version }}
 
       - name: run regular test
-        run: ./test_wcs_threads
+        run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
 
       - name: run test with bypass mode
-        run: ./test_wcs_threads-bypass
+        run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
 
   build-on-windows:
     name: Build on Windows
@@ -77,7 +79,7 @@ jobs:
         run: make WCSLIB_VERSION=${{ matrix.wcslib-version }}
 
       - name: run regular test
-        run: ./test_wcs_threads
+        run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
 
       - name: run test with bypass mode
-        run: ./test_wcs_threads-bypass
+        run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
