@@ -23,6 +23,11 @@ int set_wcs(struct wcsprm *wcs)
     wcs->crval[1] = -90.0;
     sprintf(wcs->ctype[0], "RA---AIR");
     sprintf(wcs->ctype[1], "DEC--AIR");
+#ifdef USE_FLAG_TO_BYPASS
+#warning "Using the flag to bypass the wcsset() call in wcslib-8.3 onwards"
+    wcs->flag = 1;
+    fprintf(stderr,"Setting wcs->flag = 1 to bypass the wcsset() call in wcslib-8.3 onwards\n");
+#endif
     return wcsset(wcs);
 }
 
@@ -197,11 +202,6 @@ int main(int argc, char **argv)
 
     struct wcsprm wcs;
     memset(&wcs, 0, sizeof(wcs));
-#ifdef USE_FLAG_TO_BYPASS
-#warning "Using the flag to bypass the wcsset() call in wcslib-8.3 onwards"
-    wcs.flag = 1;
-    fprintf(stderr,"Setting wcs.flag = 1 to bypass the wcsset() call in wcslib-8.3 onwards\n");
-#endif
     const int naxis = 2;
     wcsini(1, naxis, &wcs);
     set_wcs(&wcs);
