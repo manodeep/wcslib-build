@@ -20,7 +20,7 @@ $(TARGET): $(OBJS) $(WCSLIB)
 	$(CC) $(INCLUDE) $(CFLAGS) $(MEMFLAG) -c $< -o $@
 
 $(TARGET)-bypass: $(SRC)
-	$(CC) -DUSE_FLAG_TO_BYPASS $(MEMFLAG) $(CFLAGS) $< $(WCSLIB) $(LDFLAGS) -o $@
+	$(CC) -DUSE_FLAG_TO_BYPASS $(INCLUDE) $(MEMFLAG) $(CFLAGS) $< $(WCSLIB) $(LDFLAGS) -o $@
 
 .PHONY: clean
 clean:
