@@ -23,7 +23,12 @@ int set_wcs(struct wcsprm *wcs)
     wcs->crval[1] = -90.0;
     sprintf(wcs->ctype[0], "RA---AIR");
     sprintf(wcs->ctype[1], "DEC--AIR");
+#ifdef USE_FLAG_TO_BYPASS
+#warning "Using the flag to bypass the wcsset() call in wcslib-8.3 onwards"
     wcs->flag = 1;
+#else
+    wcs->flag = 0;
+#endif
     return wcsset(wcs);
 }
 
