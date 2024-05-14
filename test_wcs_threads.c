@@ -108,7 +108,7 @@ int roundtrip_coords_buggy(const int N, double *pixcrd, double *imgcrd, double *
             fprintf(stderr, "[on tid=%d]: wcsp2s failed with status %d\n", tid, status);
         }
 
-        //calling wcsset() causes the race condition (needs nowait to trigger it)
+        //calling wcsset() within a parallel region causes the race condition
         wcsset(wcs);
 
         //convert back to pixel coordinates
@@ -122,8 +122,6 @@ int roundtrip_coords_buggy(const int N, double *pixcrd, double *imgcrd, double *
     fprintf(stderr,"Using %s with nthreads = %d...done\n", __FUNCTION__, nthreads);
     return EXIT_SUCCESS;
 }
-
-
 
 
 int roundtrip_coords_omp_barrier(const int N, double *pixcrd, double *imgcrd, double *phi, double *theta, double *world, int *stat, double *dest, struct wcsprm *wcs, const int nthreads)
@@ -152,7 +150,7 @@ int roundtrip_coords_omp_barrier(const int N, double *pixcrd, double *imgcrd, do
             fprintf(stderr, "[on tid=%d]:wcsp2s failed with status %d\n", tid, status);
         }
 
-        //calling wcsset() causes the race condition (needs nowait to trigger it)
+        //calling wcsset() causes the race condition but can be prevented with the barrier and single
         #pragma omp barrier
         #pragma omp single
         wcsset(wcs);
@@ -198,6 +196,11 @@ int main(int argc, char **argv)
 
     struct wcsprm wcs;
     memset(&wcs, 0, sizeof(wcs));
+#ifdef USE_FLAG_TO_BYPASS
+#warning "Using the flag to bypass the wcsset() call in wcslib-8.3 onwards"
+    wcs.flag = 1;
+    fprintf(stderr,"Setting wcs.flag = 1 to bypass the wcsset() call in wcslib-8.3 onwards\n");
+#endif
     const int naxis = 2;
     wcsini(1, naxis, &wcs);
     set_wcs(&wcs);
