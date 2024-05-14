@@ -227,8 +227,12 @@ int main(int argc, char **argv)
         fprintf(stderr, "Memory allocation failed for N = %d\n", N);
         return EXIT_FAILURE;
     }
-    const roundtrip_coords_impls all_functions[] = { &roundtrip_coords_omp_barrier, &roundtrip_coords_buggy};
-    const char *function_names[72] = { "roundtrip_coords_omp_barrier", "roundtrip_coords_buggy"};
+    // const roundtrip_coords_impls all_functions[] = { &roundtrip_coords_omp_barrier, &roundtrip_coords_buggy};
+    // const char *function_names[72] = { "roundtrip_coords_omp_barrier", "roundtrip_coords_buggy"};
+    // const int n_functions = sizeof(all_functions)/sizeof(all_functions[0]);
+
+    const roundtrip_coords_impls all_functions[] = { &roundtrip_coords_buggy};
+    const char *function_names[72] = { "roundtrip_coords_buggy"};
     const int n_functions = sizeof(all_functions)/sizeof(all_functions[0]);
 
     const double min = -1000.0;
