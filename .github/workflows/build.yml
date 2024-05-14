@@ -24,9 +24,18 @@ jobs:
         working-directory: wcslib-${{ matrix.wcslib-version }}
         run: ./configure
 
-      - name: Make
+      - name: Make wcslib
         working-directory: wcslib-${{ matrix.wcslib-version }}
         run: make build
+
+      - name: compile thread race test code
+        run: make
+
+      - name: run regular test
+        run: ./test_wcs_threads
+
+      - name: run test with bypass mode
+        run: ./test_wcs_threads-bypass
 
   build-on-windows:
     name: Build on Windows
@@ -60,6 +69,15 @@ jobs:
         working-directory: wcslib-${{ matrix.wcslib-version }}
         run: ./configure
 
-      - name: Make
+      - name: Make wcslib
         working-directory: wcslib-${{ matrix.wcslib-version }}
         run: make build CFLAGS=-DNO_OLDNAMES
+        
+      - name: compile thread race test code
+        run: make
+
+      - name: run regular test
+        run: ./test_wcs_threads
+
+      - name: run test with bypass mode
+        run: ./test_wcs_threads-bypass
