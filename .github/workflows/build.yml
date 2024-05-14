@@ -10,22 +10,23 @@ jobs:
   build-on-linux:
     name: Build on Linux
     runs-on: ubuntu-latest
-    matrix:
+    strategy:   
+      matrix:
         wcslib-version: ["8.2.2"]
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-  
-        - name: Unzip
-          run: bzcat wcslib-${{ matrix.wcslib-version }}.bz2 | tar pvxf -
-  
-        - name: Configure
-          working-directory: wcslib-${{ matrix.wcslib-version }}
-          run: ./configure
-  
-        - name: Make
-          working-directory: wcslib-${{ matrix.wcslib-version }}
-          run: make build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Unzip
+        run: bzcat wcslib-${{ matrix.wcslib-version }}.bz2 | tar pvxf -
+
+      - name: Configure
+        working-directory: wcslib-${{ matrix.wcslib-version }}
+        run: ./configure
+
+      - name: Make
+        working-directory: wcslib-${{ matrix.wcslib-version }}
+        run: make build
 
   build-on-windows:
     name: Build on Windows
