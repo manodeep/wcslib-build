@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Unzip
-        run: bzcat wcslib-${{ matrix.wcslib-version }}.bz2 | tar pvxf -
+        run: bzcat wcslib-${{ matrix.wcslib-version }}.tar.bz2 | tar pvxf -
 
       - name: Configure
         working-directory: wcslib-${{ matrix.wcslib-version }}
