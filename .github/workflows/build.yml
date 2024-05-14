@@ -33,11 +33,11 @@ jobs:
       - name: compile thread race test code
         run: make WCSLIB_VERSION=${{ matrix.wcslib-version }}
 
-      - name: run regular test
-        run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
-
       - name: run test with bypass mode
         run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
+
+      - name: run regular test
+        run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
 
   build-on-windows:
     name: Build on Windows
@@ -78,8 +78,8 @@ jobs:
       - name: compile thread race test code
         run: make WCSLIB_VERSION=${{ matrix.wcslib-version }}
 
-      - name: run regular test
-        run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
-
       - name: run test with bypass mode
         run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
+
+      - name: run regular test
+        run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
