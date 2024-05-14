@@ -29,7 +29,7 @@ jobs:
         run: make build
 
       - name: compile thread race test code
-        run: make
+        run: make WCSLIB_VERSION=${{ matrix.wcslib-version }}
 
       - name: run regular test
         run: ./test_wcs_threads
@@ -74,7 +74,7 @@ jobs:
         run: make build CFLAGS=-DNO_OLDNAMES
         
       - name: compile thread race test code
-        run: make
+        run: make WCSLIB_VERSION=${{ matrix.wcslib-version }}
 
       - name: run regular test
         run: ./test_wcs_threads
