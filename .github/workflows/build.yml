@@ -1,35 +1,31 @@
 name: Build
 
-on:
-  workflow_dispatch:
+on: [push, pull_request]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref || github.run_id }}
+  cancel-in-progress: true
+  
 jobs:
   build-on-linux:
     name: Build on Linux
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Unzip
-        run: bzcat wcslib-8.2.2.tar.bz2 | tar pvxf -
-
-      - name: Configure
-        working-directory: wcslib-8.2.2
-        run: ./configure
-
-      - name: Make
-        working-directory: wcslib-8.2.2
-        run: make build
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: libwcs
-          path: |
-            wcslib-8.2.2/C/libwcs.so.8.2.2
-          retention-days: 7
+    matrix:
+        wcslib-version: ["8.2.2"]
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+  
+        - name: Unzip
+          run: bzcat wcslib-${{ matrix.wcslib-version }}.bz2 | tar pvxf -
+  
+        - name: Configure
+          working-directory: wcslib-${{ matrix.wcslib-version }}
+          run: ./configure
+  
+        - name: Make
+          working-directory: wcslib-${{ matrix.wcslib-version }}
+          run: make build
 
   build-on-windows:
     name: Build on Windows
@@ -54,20 +50,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Unzip
-        run: bzcat wcslib-8.2.2.tar.bz2 | tar pvxf -
+        run: bzcat wcslib-${{ matrix.wcslib-version }}.tar.bz2 | tar pvxf -
 
       - name: Configure
-        working-directory: wcslib-8.2.2
+        working-directory: wcslib-${{ matrix.wcslib-version }}
         run: ./configure
 
       - name: Make
-        working-directory: wcslib-8.2.2
+        working-directory: wcslib-${{ matrix.wcslib-version }}
         run: make build CFLAGS=-DNO_OLDNAMES
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: libwcs
-          path: |
-            wcslib-8.2.2/C/libwcs.dll.8.2.2
-          retention-days: 7
