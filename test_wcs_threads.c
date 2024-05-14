@@ -35,10 +35,11 @@ int set_wcs(struct wcsprm *wcs)
 int setup_random_pixcrd(const int N, const double min, const double max, double *pixcrd)
 {
     unsigned int seed = 292364782;
+    srand(seed);
     for(int i=0;i<N;i++) {
-        double r = (double)rand(&seed)/(double)RAND_MAX;
+        double r = (double)rand()/(double)RAND_MAX;
         pixcrd[i] = r*(max - min) + min;
-        r = (double)rand(&seed)/(double)RAND_MAX;
+        r = (double)rand()/(double)RAND_MAX;
         pixcrd[i+N] = r*(max - min) + min;
     }
     return EXIT_SUCCESS;
