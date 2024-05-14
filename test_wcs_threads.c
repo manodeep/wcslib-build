@@ -36,9 +36,9 @@ int setup_random_pixcrd(const int N, const double min, const double max, double 
 {
     unsigned int seed = 292364782;
     for(int i=0;i<N;i++) {
-        double r = (double)rand_r(&seed)/(double)RAND_MAX;
+        double r = (double)rand(&seed)/(double)RAND_MAX;
         pixcrd[i] = r*(max - min) + min;
-        r = (double)rand_r(&seed)/(double)RAND_MAX;
+        r = (double)rand(&seed)/(double)RAND_MAX;
         pixcrd[i+N] = r*(max - min) + min;
     }
     return EXIT_SUCCESS;
