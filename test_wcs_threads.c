@@ -222,8 +222,12 @@ int main(int argc, char **argv)
         fprintf(stderr, "Memory allocation failed for N = %d\n", N);
         return EXIT_FAILURE;
     }
-    const roundtrip_coords_impls all_functions[] = { &roundtrip_coords_omp_barrier, &roundtrip_coords_buggy};
-    const char *function_names[72] = { "roundtrip_coords_omp_barrier", "roundtrip_coords_buggy"};
+    // const roundtrip_coords_impls all_functions[] = { &roundtrip_coords_omp_barrier, &roundtrip_coords_buggy};
+    // const char *function_names[72] = { "roundtrip_coords_omp_barrier", "roundtrip_coords_buggy"};
+    // const int n_functions = sizeof(all_functions)/sizeof(all_functions[0]);
+
+    const roundtrip_coords_impls all_functions[] = { &roundtrip_coords_buggy};
+    const char *function_names[72] = { "roundtrip_coords_buggy"};
     const int n_functions = sizeof(all_functions)/sizeof(all_functions[0]);
 
     const double min = -1000.0;
@@ -231,6 +235,7 @@ int main(int argc, char **argv)
     setup_random_pixcrd(N, min, max, pixcrd);
     memcpy(pixcrd_orig, pixcrd, 2*N*sizeof(*pixcrd));
 
+    int64_t num_wrong = 0;
     for(int nthreads=1;nthreads<=max_numthreads;nthreads++) {
         for(int ifunc=0;ifunc<n_functions;ifunc++) {
             struct timespec t0, t1;
@@ -243,6 +248,7 @@ int main(int argc, char **argv)
             clock_gettime(CLOCK_MONOTONIC, &t1);
             const double func_time = (t1.tv_sec - t0.tv_sec) + 1e-9*(t1.tv_nsec - t0.tv_nsec);
             const int n_mismatches = count_n_mismatches(N, pixcrd_orig, dest);
+            num_wrong += n_mismatches;
             fprintf(stderr,"Called function = '%s' with nthreads=%d, N=%d, n_mismatches = %d. Time taken = %g seconds\n",
                          function_names[ifunc], nthreads, N,  n_mismatches, func_time);
             memcpy(pixcrd, pixcrd_orig, 2*N*sizeof(*pixcrd));
@@ -259,5 +265,5 @@ int main(int argc, char **argv)
     free(stat);
     free(pixcrd_orig);
 
-    return EXIT_SUCCESS;
+    return num_wrong;
 }
