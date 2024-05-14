@@ -1,8 +1,8 @@
 WCSLIBDIR := wcslib-$(WCSLIB_VERSION)
 
 CC := gcc
-CFLAGS += -Wall -Wextra -O2 -fopenmp -I$(WCSLIBDIR)/C -I$(WCSLIBDIR)
-LDFLAGS += -lm -fopenmp
+CFLAGS ?= -Wall -Wextra -O2 -fopenmp -I$(WCSLIBDIR)/C -I$(WCSLIBDIR)
+LDFLAGS ?= -lm -fopenmp
 WCSLIB := $(WCSLIBDIR)/C/libwcs-$(WCSLIB_VERSION).a
 
 TARGET := test_wcs_threads
