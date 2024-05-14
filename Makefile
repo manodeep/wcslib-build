@@ -14,7 +14,7 @@ $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) $< $(WCSLIB) $(LDFLAGS) -o $@
 
 $(TARGET)-bypass: $(SRC)
-	$(CC) -DUSE_FLAG_TO_BYPASS $(CFLAGS) $(LDFLAGS) $< $(WCSLIB) -o $@
+	$(CC) -DUSE_FLAG_TO_BYPASS $(CFLAGS) $< $(WCSLIB)  $(LDFLAGS) -o $@
 
 clean:
 	rm -f $(TARGET) $(TARGET)-bypass
