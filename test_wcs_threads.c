@@ -109,6 +109,7 @@ int roundtrip_coords_buggy(const int N, double *pixcrd, double *imgcrd, double *
         }
 
         //calling wcsset() within a parallel region causes the race condition
+        fprintf(stderr,"[On tid = %d] wcs->flag = %d\n", tid, wcs->flag);
         wcsset(wcs);
 
         //convert back to pixel coordinates
