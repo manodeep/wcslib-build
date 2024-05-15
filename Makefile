@@ -7,6 +7,11 @@ MEMFLAG := -fsanitize=undefined -fsanitize=bounds -fsanitize=address -fsanitize-
 INCLUDE := -I$(WCSLIBDIR)/C -I$(WCSLIBDIR)
 WCSLIB := $(WCSLIBDIR)/C/libwcs-$(WCSLIB_VERSION).a
 
+ifneq ($(OS),Windows_NT)
+  CFLAGS += $(MEMFLAG)
+  LDFLAGS += $(MEMFLAG)
+endif
+
 TARGET := test_wcs_threads
 SRC := test_wcs_threads.c
 OBJS := $(SRC:.c=.o)
@@ -14,13 +19,13 @@ OBJS := $(SRC:.c=.o)
 all: $(TARGET) $(TARGET)-bypass
 
 $(TARGET): $(OBJS) $(WCSLIB)
-	$(CC) $(MEMFLAG) $^ $(LDFLAGS) -o $@
+	$(CC) $^ $(LDFLAGS) -o $@
 
 %.o: %.c Makefile
-	$(CC) $(INCLUDE) $(CFLAGS) $(MEMFLAG) -c $< -o $@
+	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
 
 $(TARGET)-bypass: $(SRC)
-	$(CC) -DUSE_FLAG_TO_BYPASS $(INCLUDE) $(MEMFLAG) $(CFLAGS) $< $(WCSLIB) $(LDFLAGS) -o $@
+	$(CC) -DUSE_FLAG_TO_BYPASS $(INCLUDE) $(CFLAGS) $< $(WCSLIB) $(LDFLAGS) -o $@
 
 .PHONY: clean
 clean:
