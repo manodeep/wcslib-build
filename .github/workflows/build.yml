@@ -80,7 +80,7 @@ jobs:
         run: make build CFLAGS=-DNO_OLDNAMES
 
       - name: compile thread race test code
-        run: make WCSLIB_VERSION=${{ matrix.wcslib-version }} CFLAGS=-DNO_OLDNAMES
+        run: make WCSLIB_VERSION=${{ matrix.wcslib-version }} CFLAGS="-DNO_OLDNAMES -O2 -fopenmp"
 
       - name: run test with bypass mode
         run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
