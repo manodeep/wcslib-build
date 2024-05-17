@@ -2565,7 +2565,7 @@ int wcsset(struct wcsprm *wcs)
   if (wcs->flag == -WCSSET) return 0;
   struct wcserr **err = &(wcs->err);
 
-  BEGIN_SINGLE_THREAD_REGION
+  BEGIN_SINGLE_THREAD_REGION(wcs, &mutex, exclusive_section_executed)
   // Determine axis types from CTYPEia.
   int status;
   if ((status = wcs_types(wcs))) {
@@ -2967,7 +2967,7 @@ int wcsset(struct wcsprm *wcs)
   wcs->chksum = wcs_chksum(wcs);
 
   wcs->flag = (wcs->flag == 1) ? -WCSSET : WCSSET;
-  END_SINGLE_THREAD_REGION
+  END_SINGLE_THREAD_REGION(wcs, &mutex, &cond, exclusive_section_executed)
   return 0;
 }
 
