@@ -23,14 +23,17 @@ jobs:
         run: bzcat wcslib-${{ matrix.wcslib-version }}.tar.bz2 | tar pvxf -
 
       - name: Configure
+        if: matrix.wcslib-version == '8.3'
         working-directory: wcslib-${{ matrix.wcslib-version }}
         run: ./configure --disable-flex --disable-fortran --without-cfitsio --without-pgplot CFLAGS="-O3 -Wall -Wextra"
 
       - name: Make wcslib
+        if: matrix.wcslib-version == '8.3'
         working-directory: wcslib-${{ matrix.wcslib-version }}
-        run: make build
+        run: make -j4 build
 
       - name: compile thread race test code
+        if: matrix.wcslib-version == '8.3'
         run: make WCSLIB_VERSION=${{ matrix.wcslib-version }}
 
       - name: run test with bypass mode
@@ -89,14 +92,17 @@ jobs:
         run: bzcat wcslib-${{ matrix.wcslib-version }}.tar.bz2 | tar pvxf -
 
       - name: Configure
+        if: matrix.wcslib-version == '8.3'
         working-directory: wcslib-${{ matrix.wcslib-version }}
         run: ./configure --disable-flex --disable-fortran --without-cfitsio --without-pgplot CFLAGS="-DNO_OLDNAMES -O3 -Wall -Wextra"
 
       - name: Make wcslib
+        if: matrix.wcslib-version == '8.3'
         working-directory: wcslib-${{ matrix.wcslib-version }}
-        run: make build
+        run: make -j4 build
 
       - name: compile thread race test code
+        if: matrix.wcslib-version == '8.3'
         run: make WCSLIB_VERSION=${{ matrix.wcslib-version }} CFLAGS="-DNO_OLDNAMES -O2 -fopenmp"
 
       - name: run test with bypass mode
@@ -115,7 +121,7 @@ jobs:
 
       - name: Make wcslib
         working-directory: wcslib-${{ matrix.wcslib-version }}
-        run: make build
+        run: make -j4 build
 
       - name: re-compile thread race test code
         run: make clean && make WCSLIB_VERSION=${{ matrix.wcslib-version }} CFLAGS="-DNO_OLDNAMES -O2 -fopenmp"
