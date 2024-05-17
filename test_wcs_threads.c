@@ -96,7 +96,10 @@ int roundtrip_coords_buggy(const int N, double *pixcrd, double *imgcrd, double *
     fprintf(stderr,"Using %s with nthreads = %d\n", __FUNCTION__, nthreads);
     #pragma omp parallel num_threads(nthreads) shared(wcs, pixcrd, imgcrd, phi, theta, world, stat, dest)
     {
-        assert(omp_get_num_threads() == nthreads);
+        if(omp_get_num_threads() != nthreads){
+            fprintf(stderr,"Error: Expected %d threads, got %d threads\n", nthreads, omp_get_num_threads());
+            exit(EXIT_FAILURE);
+        }
         const int tid = omp_get_thread_num();
         int start, n_thistask;
         distribute_compute_over_ntasks(N, nthreads, tid, &n_thistask, &start);
