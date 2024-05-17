@@ -67,7 +67,7 @@ int pthread_cond_broadcast(thread_cond_t *cond);
     {                                                                   \
         if(abs(wcs->flag) != WCSSET) control_var = 0;                   \
         if(control_var == 0)                                            \
-        {                                                               \
+        {
 
 
 
