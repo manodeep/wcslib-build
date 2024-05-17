@@ -75,7 +75,7 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex)
     return 0;
 }
 
-int pthread_cond_init(thread_cond_t *cond, pthread_condattr_t *attr)
+int pthread_cond_init(pthread_cond_t *cond, pthread_condattr_t *attr)
 {
     (void)attr;
     if (cond == NULL)
@@ -84,21 +84,21 @@ int pthread_cond_init(thread_cond_t *cond, pthread_condattr_t *attr)
     return 0;
 }
 
-int pthread_cond_destroy(thread_cond_t *cond)
+int pthread_cond_destroy(pthread_cond_t *cond)
 {
     /* Windows does not have a destroy for conditionals */
     (void)cond;
     return 0;
 }
 
-int pthread_cond_wait(thread_cond_t *cond, pthread_mutex_t *mutex)
+int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
 {
     if (cond == NULL || mutex == NULL)
         return 1;
     return pthread_cond_timedwait(cond, mutex, NULL)
 }
 
-int pthread_cond_timedwait(thread_cond_t *cond, pthread_mutex_t *mutex,
+int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
                            const struct timespec *abstime)
 {
     if (cond == NULL || mutex == NULL)
@@ -108,7 +108,7 @@ int pthread_cond_timedwait(thread_cond_t *cond, pthread_mutex_t *mutex,
     return 0;
 }
 
-int pthread_cond_signal(thread_cond_t *cond)
+int pthread_cond_signal(pthread_cond_t *cond)
 {
     if (cond == NULL)
         return 1;
@@ -116,7 +116,7 @@ int pthread_cond_signal(thread_cond_t *cond)
     return 0;
 }
 
-int pthread_cond_broadcast(thread_cond_t *cond)
+int pthread_cond_broadcast(pthread_cond_t *cond)
 {
     if (cond == NULL)
         return 1;
