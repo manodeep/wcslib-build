@@ -87,6 +87,7 @@ jobs:
 
       - name: copy patched files to wcslib directory
         run: |
+          chmod 644 wcslib-${{ matrix.wcslib-version }}/C/wcs.c
           cp -p wcs-${{ matrix.wcslib-version }}.c wcslib-${{ matrix.wcslib-version }}/C/wcs.c
           cp -p wcs_pthreads.[ch] wcslib-${{ matrix.wcslib-version }}/C/
 
