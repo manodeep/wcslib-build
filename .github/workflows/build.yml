@@ -85,5 +85,16 @@ jobs:
       - name: run test with bypass mode
         run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
 
-    #   - name: run regular test
-    #     run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
+      - name: copy patched files to wcslib directory
+        run: cp -p wcs-${{ matrix.wcslib-version }}.c wcs_pthreads.[ch] wcslib-${{ matrix.wcslib-version }}/C/
+
+      - name: re-run configure to pick up new files
+        working-directory: wcslib-${{ matrix.wcslib-version }}
+        run: ./configure
+
+      - name: Make wcslib
+        working-directory: wcslib-${{ matrix.wcslib-version }}
+        run: make build CFLAGS=-DNO_OLDNAMES
+
+      - name: run regular test
+        run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
