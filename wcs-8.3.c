@@ -47,8 +47,13 @@
 
 #include "wcs_pthreads.h"
 
+#ifndef ON_WINDOWS
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+#else
 static pthread_mutex_t mutex;
 static pthread_cond_t cond;
+#endif
 static int exclusive_section_executed = 0;
 
 // Maximum number of PVi_ma and PSi_ma keywords.
@@ -169,9 +174,10 @@ int wcsinit(
 
   // Check inputs.
   if (wcs == 0x0) return WCSERR_NULL_POINTER;
+#ifdef ON_WINDOWS
   pthread_mutex_init(&mutex, NULL);//error can only occur if mutex == NULL
   pthread_cond_init(&cond, NULL);//error can only occur if cond == NULL
-
+#endif
   if (npvmax < 0) npvmax = wcsnpv(-1);
   if (npsmax < 0) npsmax = wcsnps(-1);
 
