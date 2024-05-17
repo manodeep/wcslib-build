@@ -99,5 +99,8 @@ jobs:
         working-directory: wcslib-${{ matrix.wcslib-version }}
         run: make build CFLAGS=-DNO_OLDNAMES
 
+      - name: re-compile thread race test code
+        run: make clean && make WCSLIB_VERSION=${{ matrix.wcslib-version }} CFLAGS="-DNO_OLDNAMES -O2 -fopenmp"
+
       - name: run regular test
         run: ./test_wcs_threads ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
