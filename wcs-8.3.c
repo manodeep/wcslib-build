@@ -51,8 +51,8 @@
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 #else
-static pthread_mutex_t mutex;
-static pthread_cond_t cond;
+static pthread_mutex_t mutex = {0};
+static pthread_cond_t cond = {0};
 #endif
 static int exclusive_section_executed = 0;
 
