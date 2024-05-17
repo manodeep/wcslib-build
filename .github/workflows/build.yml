@@ -12,8 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # wcslib-version: ["8.2.2", "8.3"]
-        wcslib-version: ["8.3"]
+        wcslib-version: ["8.2.2", "8.3"]
         numpoints: [1000, 10000]
         maxthreads: [5]
     steps:

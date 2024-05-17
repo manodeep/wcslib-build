@@ -44,6 +44,12 @@
 #include "tab.h"
 #include "wcs.h"
 
+#include "wcs_pthreads.h"
+
+static pthread_mutex_t mutex = {0};
+static pthread_cond_t cond = {0};
+static int exclusive_section_executed = 0;
+
 // Maximum number of PVi_ma and PSi_ma keywords.
 int NPVMAX = 64;
 int NPSMAX =  8;
@@ -153,6 +159,9 @@ int wcsinit(
 
 {
   static const char *function = "wcsinit";
+
+  pthread_mutex_init(&mutex, NULL);//error can only occur if mutex == NULL
+  pthread_cond_init(&cond, NULL);//error can only occur if cond == NULL
 
   int status;
 
@@ -1667,6 +1676,9 @@ int wcsfree(struct wcsprm *wcs)
 {
   if (wcs == 0x0) return WCSERR_NULL_POINTER;
 
+  pthread_mutex_destroy(&mutex);
+  pthread_cond_destroy(&cond);
+
   if (wcs->flag == -1) {
     wcs->lin.flag = -1;
 
@@ -2496,6 +2508,7 @@ int wcsset(struct wcsprm *wcs)
   if (wcs == 0x0) return WCSERR_NULL_POINTER;
   struct wcserr **err = &(wcs->err);
 
+  BEGIN_SINGLE_THREAD_REGION(wcs, &mutex, exclusive_section_executed)
   // Determine axis types from CTYPEia.
   int status;
   if ((status = wcs_types(wcs))) {
@@ -2878,6 +2891,7 @@ int wcsset(struct wcsprm *wcs)
   }
 
   wcs->flag = WCSSET;
+  END_SINGLE_THREAD_REGION(wcs, &mutex, &cond, exclusive_section_executed)
 
   return WCSERR_SUCCESS;
 }
