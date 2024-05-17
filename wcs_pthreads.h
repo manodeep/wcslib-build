@@ -76,8 +76,8 @@ int pthread_cond_broadcast(pthread_cond_t *cond);
         if(control_var == 0 && wcs_ptr->naxis > 0) {                        \
             control_var = 1;                                                \
         }                                                                   \
-        pthread_cond_broadcast(cond_ptr);                                   \
         pthread_mutex_unlock(mutex_ptr);                                    \
+        pthread_cond_broadcast(cond_ptr);                                   \
     } else {  /* the else for the mutex_trylock */                          \
         pthread_mutex_lock(mutex_ptr);                                      \
         while (control_var != 1) {                                          \
