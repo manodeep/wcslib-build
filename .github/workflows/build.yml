@@ -86,7 +86,9 @@ jobs:
         run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
 
       - name: copy patched files to wcslib directory
-        run: cp -p wcs-${{ matrix.wcslib-version }}.c wcs_pthreads.[ch] wcslib-${{ matrix.wcslib-version }}/C/
+        run: |
+          cp -p wcs-${{ matrix.wcslib-version }}.c wcslib-${{ matrix.wcslib-version }}/C/wcs.c
+          cp -p wcs_pthreads.[ch] wcslib-${{ matrix.wcslib-version }}/C/
 
       - name: re-run configure to pick up new files
         working-directory: wcslib-${{ matrix.wcslib-version }}

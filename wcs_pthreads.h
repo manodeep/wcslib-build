@@ -34,8 +34,8 @@ extern "C" {
 # include <windows.h>
 
 typedef CRITICAL_SECTION pthread_mutex_t;
-// typedef void pthread_mutexattr_t;
-// typedef void pthread_condattr_t;
+typedef void pthread_mutexattr_t;
+typedef void pthread_condattr_t;
 // typedef void pthread_rwlockattr_t;
 typedef HANDLE pthread_t;
 typedef CONDITION_VARIABLE pthread_cond_t;
@@ -50,12 +50,12 @@ int pthread_mutex_lock(pthread_mutex_t *mutex);
 int pthread_mutex_trylock(pthread_mutex_t *mutex);
 int pthread_mutex_unlock(pthread_mutex_t *mutex);
 
-int pthread_cond_init(thread_cond_t *cond, pthread_condattr_t *attr);
-int pthread_cond_destroy(thread_cond_t *cond);
-int pthread_cond_wait(thread_cond_t *cond, pthread_mutex_t *mutex);
-int pthread_cond_timedwait(thread_cond_t *cond, pthread_mutex_t *mutex, const struct timespec *abstime);
-int pthread_cond_signal(thread_cond_t *cond);
-int pthread_cond_broadcast(thread_cond_t *cond);
+int pthread_cond_init(pthread_cond_t *cond, pthread_condattr_t *attr);
+int pthread_cond_destroy(pthread_cond_t *cond);
+int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
+int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex, const struct timespec *abstime);
+int pthread_cond_signal(pthread_cond_t *cond);
+int pthread_cond_broadcast(pthread_cond_t *cond);
 
 #else
 // on posix -> just use pthread.h

@@ -51,7 +51,6 @@ static pthread_mutex_t mutex;
 static pthread_cond_t cond;
 static int exclusive_section_executed = 0;
 
-
 // Maximum number of PVi_ma and PSi_ma keywords.
 int NPVMAX = 64;
 int NPSMAX =  8;
@@ -2555,6 +2554,10 @@ int wcsset(struct wcsprm *wcs)
   if (wcs == 0x0) return WCSERR_NULL_POINTER;
   if (wcs->flag == -WCSSET) return 0;
   struct wcserr **err = &(wcs->err);
+
+#ifndef BEGIN_SINGLE_THREAD_REGION
+#error Can not be
+#endif
 
   BEGIN_SINGLE_THREAD_REGION
   // Determine axis types from CTYPEia.
