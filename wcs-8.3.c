@@ -175,8 +175,12 @@ int wcsinit(
   // Check inputs.
   if (wcs == 0x0) return WCSERR_NULL_POINTER;
 #ifdef ON_WINDOWS
-  pthread_mutex_init(&mutex, NULL);//error can only occur if mutex == NULL
-  pthread_cond_init(&cond, NULL);//error can only occur if cond == NULL
+  {
+    int rc = pthread_mutex_init(&mutex, NULL);//error can only occur if mutex == NULL
+    if(rc != 0) return WCSERR_NULL_POINTER;
+    rc = pthread_cond_init(&cond, NULL);//error can only occur if cond == NULL
+    if(rc != 0) return WCSERR_NULL_POINTER;
+  }
 #endif
   if (npvmax < 0) npvmax = wcsnpv(-1);
   if (npsmax < 0) npsmax = wcsnps(-1);
