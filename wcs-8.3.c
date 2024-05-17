@@ -2555,10 +2555,6 @@ int wcsset(struct wcsprm *wcs)
   if (wcs->flag == -WCSSET) return 0;
   struct wcserr **err = &(wcs->err);
 
-#ifndef BEGIN_SINGLE_THREAD_REGION
-#error Can not be
-#endif
-
   BEGIN_SINGLE_THREAD_REGION
   // Determine axis types from CTYPEia.
   int status;
