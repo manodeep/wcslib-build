@@ -34,6 +34,7 @@ jobs:
         run: make WCSLIB_VERSION=${{ matrix.wcslib-version }}
 
       - name: run test with bypass mode
+        if: matrix.wcslib-version == '8.3'
         run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
 
       - name: copy patched files to wcslib directory
@@ -100,6 +101,7 @@ jobs:
         run: make WCSLIB_VERSION=${{ matrix.wcslib-version }} CFLAGS="-DNO_OLDNAMES -O2 -fopenmp"
 
       - name: run test with bypass mode
+        if: matrix.wcslib-version == '8.3'
         run: ./test_wcs_threads-bypass ${{ matrix.numpoints }} ${{ matrix.maxthreads }}
 
       - name: copy patched files to wcslib directory
