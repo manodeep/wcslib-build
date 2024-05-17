@@ -94,6 +94,7 @@ int roundtrip_coords_buggy(const int N, double *pixcrd, double *imgcrd, double *
 {
     const int naxis = wcs->naxis;
     fprintf(stderr,"Using %s with nthreads = %d\n", __FUNCTION__, nthreads);
+    omp_set_num_threads(nthreads);
     #pragma omp parallel num_threads(nthreads) shared(wcs, pixcrd, imgcrd, phi, theta, world, stat, dest)
     {
         if(omp_get_num_threads() != nthreads){
